@@ -1,8 +1,6 @@
 #!/bin/bash
 
-file=${1:-"data/dsmprobe.csv"}
-
-
+file=${1:-"data/probe.csv"}
 
 # Get previous linecount
 prevlinecount=$(cat $file.count 2>/dev/null)
@@ -32,8 +30,8 @@ for i in $(cat data/maclookup.csv | grep -v '^#' | cut -d, -f1); do
     description=$(cat data/maclookup.csv | grep -v '^#' | grep -i "$i" | cut -d, -f2)
     convertedtime=$(echo "$match" | cut -d, -f1 | { read stdin; date -d "@$stdin" +%H:%M:%S;} )
     #description=""
-    if [[ $description =~ .*,eventDOWN,.* ]]; then 
-      convertedtime=$(echo "$match" | cut -d, -f4 | { read stdin; date -d "@$stdin" +%H:%M:%S;} ) 
+    if [[ $description =~ .*,eventDOWN,.* ]]; then
+      convertedtime=$(echo "$match" | cut -d, -f4 | { read stdin; date -d "@$stdin" +%H:%M:%S;} )
     fi
     output="$output$match,$convertedtime,$description\n"
   fi
@@ -45,8 +43,3 @@ if [[ "$output" ]]; then
 fi
 
 echo "$curlinecount" > $file.count
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 118481ddab257e1a832cf9208000cedb2e8c53b5

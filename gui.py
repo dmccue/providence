@@ -2,10 +2,9 @@
 import json, time, datetime
 
 
-
 try:
-  with open("data/dsmprobe.csv") as f:
-    lines = f.readlines() 
+  with open("data/probe.csv") as f:
+    lines = f.readlines()
 except ValueError:
     lines = []
 
@@ -14,9 +13,9 @@ events = []
 
 for line in lines:
   lineArray = line.strip("\n").split(",")
-  if not lineArray[2] in macs.keys(): 
+  if not lineArray[2] in macs.keys():
     if lineArray[1].startswith('eventUP') or lineArray[1].startswith('eventDOWN'):
-      macs[lineArray[2]] = [] 
+      macs[lineArray[2]] = []
   else:
     if lineArray[1].startswith('eventUP'):
       macs[lineArray[2]].append(lineArray[0]+"u")
@@ -40,7 +39,7 @@ for mac in macs.keys():
         #print "Event", time.strftime("%H:%M:%S", time.gmtime(timeUP)), time.strftime("%H:%M:%S", time.gmtime(timeDOWN)), (timeDOWN-timeUP)
         #print "Event", timeUP, timeDOWN, (timeDOWN-timeUP)
         #events.append([mac,datetime.datetime.fromtimestamp(timeUP),datetime.datetime.fromtimestamp(timeDOWN)])
-        events.append([mac,timeUP,timeDOWN])
+        events.append([mac, timeUP, timeDOWN])
         timeUP, timeDOWN = None, None
 
 print str(events)

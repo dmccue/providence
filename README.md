@@ -1,1 +1,3 @@
 # providence
+
+./start.sh

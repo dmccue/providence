@@ -1,22 +1,11 @@
 #!/bin/bash
+export PYTHONUNBUFFERED=1
 
+sudo airmon-ng check kill
+sudo airmon-ng start wlan0
 
-source .source
-SLACK_CMD='echo -e "$(date '+%Y\/%m\/%d_%H:%M:%S'):\n$(cat -)" | tee /dev/tty | slacker -c announce -n wifi-bot'
+git reset --hard HEAD && git pull
 
-echo "Started watching files" | eval $SLACK_CMD
-trap '{ echo "Stopped watching files" | eval $SLACK_CMD ; exit 1; }' INT
-
-inotifywait -m data |
-    while read path action file; do
-        #if [[ "$action" == "MOVED_TO" ]] && [[ "$file" =~ Kismet.*netxml$ ]]; then
-          # If change to Kismet xml logfile
-          #echo "File updated $file" && python wifi-format.py "data/$file" && \
-          #echo "File updated $file" && python wifi-process.py | tee -a data/wifi-process.log | eval $SLACK_CMD && /
-        if [[ "$file" =~ dsmprobe.csv$  ]]; then
-
-          ./alert.sh | slacker -c specific -n wifi-bot
-
-        fi
-
-    done
+pgrep providence-monitor.sh 2>&1 >/dev/null || \
+  ./providence-monitor.sh 2>&1 | tee -a data/providence-monitor.log
+sudo python -u probe.py -i wlan0mon | tee -a data/probe.csv
