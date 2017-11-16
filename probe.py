@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import time, datetime, argparse, netaddr, sys, logging
+import time, datetime, argparse, netaddr, sys, logging, json
 from scapy.all import *
 from pprint import pprint
 from logging.handlers import RotatingFileHandler
@@ -44,10 +44,38 @@ def getManufacturer( mac ):
     return ""
   return manufacturer
 
+def readObjects():
+  global mac_cache
+  global ap_cache
+
+  # read objects from file
+  try:
+    with open('data/macs.cache', 'w') as infile:
+      mac_cache = json.load(infile)
+    with open('data/aps.cache', 'w') as infile:
+      ap_cache = json.load(infile)
+  except:
+    pass
+
+def writeObjects():
+  global mac_cache
+  global ap_cache
+
+  # write objects to file
+  try:
+    with open('data/macs.cache', 'w') as outfile:
+      json.dump(mac_cache, outfile)
+    with open('data/aps.cache', 'w') as outfile:
+      json.dump(ap_cache, outfile)
+  except:
+    pass
+
 
 def runStats():
   global packetcounter
   epoch = int(time.time())
+
+  writeObjects()
 
   # Output stats
   try:
@@ -124,6 +152,7 @@ def main():
   #logger.addHandler(handler)
   #if args.log:
   #	logger.addHandler(logging.StreamHandler(sys.stdout))
+  readObjects()
   logger = ""
   built_packet_cb = build_packet_callback(logger)
   sniff(iface=args.interface, prn=built_packet_cb, store=0)
