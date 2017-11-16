@@ -124,7 +124,7 @@ def build_packet_callback(logger):
         addAP(packet.addr3, packet)
         return
       if packet.subtype in [ 4 ]:
-	# Mute subtype 4
+        addAP(packet.addr2, packet)
         return
 
     print str(packet.type), str(packet.subtype), str(macs), packet.info
