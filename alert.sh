@@ -45,5 +45,8 @@ if [[ "$output" ]]; then
 fi
 
 echo "$curlinecount" > $file.count
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 118481ddab257e1a832cf9208000cedb2e8c53b5
