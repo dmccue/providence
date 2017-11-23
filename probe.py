@@ -55,6 +55,7 @@ def readObjects():
     with open('data/aps.cache', 'w') as infile:
       ap_cache = json.load(infile)
   except:
+    print "Error: Unable to read cache"
     pass
 
 def writeObjects():
@@ -68,6 +69,7 @@ def writeObjects():
     with open('data/aps.cache', 'w') as outfile:
       json.dump(ap_cache, outfile)
   except:
+    print "Error: Unable to write cache"
     pass
 
 
